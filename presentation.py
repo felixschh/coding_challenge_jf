@@ -20,7 +20,7 @@ genders = ['Both', 'Male', 'Female']
 graph_list = ('Height Histogram', 'Weight Histogram', 'Weight-Height Scatter')
 gender_selector = st.selectbox("Select the gender:", genders)
 graph_selector = st.selectbox("Select the graph to show:", graph_list)
-
+bins = st.slider('Change the bins:', 0, 60)
 if graph_selector == 'Weight-Height Scatter' and gender_selector != 'Both':
     fig_scatter = px.scatter(df, x=df.Weight[df['Gender'] == gender_selector], y=df.Height[df['Gender'] == gender_selector], color=df.Index[df['Gender'] == gender_selector])
     st.plotly_chart(fig_scatter)
@@ -30,36 +30,37 @@ if graph_selector == 'Weight-Height Scatter' and gender_selector == 'Both':
     st.plotly_chart(fig_scatter)
 
 if graph_selector == 'Height Histogram' and gender_selector == 'Male':
-    fig_male_height_hist = px.histogram(df.Height[df['Gender'] == gender_selector], nbins=50, marginal='rug', color=df.Index[df['Gender'] == gender_selector])
+    fig_male_height_hist = px.histogram(df.Height[df['Gender'] == gender_selector], nbins=bins, marginal='rug', color=df.Index[df['Gender'] == gender_selector])
     fig_male_height_hist.update_layout(bargap=0.1)
     st.plotly_chart(fig_male_height_hist)
 
 if graph_selector == 'Height Histogram' and gender_selector == 'Female':
-    fig_male_height_hist = px.histogram(df.Height[df['Gender'] == gender_selector], nbins=50, marginal='rug', color=df.Index[df['Gender'] == gender_selector])
+    fig_male_height_hist = px.histogram(df.Height[df['Gender'] == gender_selector], nbins=bins, marginal='rug', color=df.Index[df['Gender'] == gender_selector])
     fig_male_height_hist.update_layout(bargap=0.1)
     st.plotly_chart(fig_male_height_hist)
 
 if graph_selector == 'Height Histogram' and gender_selector == 'Both':
-    fig_male_height_hist = px.histogram(df.Height, nbins=50, marginal='rug', color=df.Index)
+    fig_male_height_hist = px.histogram(df.Height, nbins=bins, marginal='rug', color=df.Index)
     fig_male_height_hist.update_layout(bargap=0.1)
     st.plotly_chart(fig_male_height_hist)
 
 if graph_selector == 'Weight Histogram' and gender_selector == 'Male':
-    fig_male_height_hist = px.histogram(df.Weight[df['Gender'] == gender_selector], nbins=50, marginal='rug', color=df.Index[df['Gender'] == gender_selector])
+    fig_male_height_hist = px.histogram(df.Weight[df['Gender'] == gender_selector], nbins=bins, marginal='rug', color=df.Index[df['Gender'] == gender_selector])
     fig_male_height_hist.update_layout(bargap=0.1)
     st.plotly_chart(fig_male_height_hist)
 
 if graph_selector == 'Weight Histogram' and gender_selector == 'Female':
-    fig_male_height_hist = px.histogram(df.Weight[df['Gender'] == gender_selector], nbins=50, marginal='rug', color=df.Index[df['Gender'] == gender_selector])
+    fig_male_height_hist = px.histogram(df.Weight[df['Gender'] == gender_selector], nbins=bins, marginal='rug', color=df.Index[df['Gender'] == gender_selector])
     fig_male_height_hist.update_layout(bargap=0.1)
     st.plotly_chart(fig_male_height_hist)
 
 if graph_selector == 'Weight Histogram' and gender_selector == 'Both':
-    fig_male_height_hist = px.histogram(df.Weight, nbins=50, marginal='rug', color=df.Index)
+    fig_male_height_hist = px.histogram(df.Weight, nbins=bins, marginal='rug', color=df.Index)
     fig_male_height_hist.update_layout(bargap=0.1)
     st.plotly_chart(fig_male_height_hist)
 
 
+st.header('Means by Indices')
 index_means_weight = df.groupby('Index').Weight.mean().reset_index()['Weight']
 index_means_height = df.groupby('Index').Height.mean().reset_index()['Height']
 
@@ -68,7 +69,6 @@ index_means_height = df.groupby('Index').Height.mean().reset_index()['Height']
 
 means_df = pd.DataFrame(data=[index_means_weight, index_means_height])
 means_df = means_df.transpose()
-st.dataframe(means_df)
 
 fig = px.scatter(means_df, x=index_means_weight, y=index_means_height, color=means_df.index)
 st.plotly_chart(fig)
